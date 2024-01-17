@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CompleteMeDBModelStoreContainer" CdmEntityContainer="CompleteMeDBEntities">
+    <EntitySetMapping Name="drawings">
+      <EntityTypeMapping TypeName="CompleteMeDBModel.drawing">
+        <MappingFragment StoreEntitySet="drawings">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="displayDrawingUrl" ColumnName="displayDrawingUrl" />
+          <ScalarProperty Name="drawingUrl" ColumnName="drawingUrl" />
+          <ScalarProperty Name="isPublished" ColumnName="isPublished" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="shapes">
+      <EntityTypeMapping TypeName="CompleteMeDBModel.shape">
+        <MappingFragment StoreEntitySet="shapes">
+          <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+          <ScalarProperty Name="displayShapeUrl" ColumnName="displayShapeUrl" />
+          <ScalarProperty Name="shapeUrl" ColumnName="shapeUrl" />
+          <ScalarProperty Name="levelNumber" ColumnName="levelNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="CompleteMeDBModel.user">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="password" ColumnName="password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="addDrawing" FunctionName="CompleteMeDBModel.Store.addDrawing" />
+    <FunctionImportMapping FunctionImportName="addUser" FunctionName="CompleteMeDBModel.Store.addUser" />
+    <FunctionImportMapping FunctionImportName="deleteDrawing" FunctionName="CompleteMeDBModel.Store.deleteDrawing" />
+    <FunctionImportMapping FunctionImportName="getDrawingsByShape" FunctionName="CompleteMeDBModel.Store.getDrawingsByShape">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CompleteMeDBModel.getDrawingsByShape_Result">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="displayDrawingUrl" ColumnName="displayDrawingUrl" />
+          <ScalarProperty Name="drawingUrl" ColumnName="drawingUrl" />
+          <ScalarProperty Name="isPublished" ColumnName="isPublished" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="getShape" FunctionName="CompleteMeDBModel.Store.getShape">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CompleteMeDBModel.getShape_Result">
+          <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+          <ScalarProperty Name="displayShapeUrl" ColumnName="displayShapeUrl" />
+          <ScalarProperty Name="shapeUrl" ColumnName="shapeUrl" />
+          <ScalarProperty Name="levelNumber" ColumnName="levelNumber" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="updateDrawing" FunctionName="CompleteMeDBModel.Store.updateDrawing" />
+    <FunctionImportMapping FunctionImportName="getShapesByLevel" FunctionName="CompleteMeDBModel.Store.getShapesByLevel" />
+    <FunctionImportMapping FunctionImportName="getDrawingsByUser" FunctionName="CompleteMeDBModel.Store.getDrawingsByUser">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CompleteMeDBModel.getDrawingsByUser_Result">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="displayDrawingUrl" ColumnName="displayDrawingUrl" />
+          <ScalarProperty Name="drawingUrl" ColumnName="drawingUrl" />
+          <ScalarProperty Name="isPublished" ColumnName="isPublished" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="isUserExists" FunctionName="CompleteMeDBModel.Store.isUserExists" />
+    <FunctionImportMapping FunctionImportName="getShapesAccordingToLevel" FunctionName="CompleteMeDBModel.Store.getShapesAccordingToLevel">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CompleteMeDBModel.getShapesAccordingToLevel_Result">
+          <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+          <ScalarProperty Name="displayShapeUrl" ColumnName="displayShapeUrl" />
+          <ScalarProperty Name="shapeUrl" ColumnName="shapeUrl" />
+          <ScalarProperty Name="levelNumber" ColumnName="levelNumber" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CompleteMeDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="drawings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="30" />
+          <Property Name="shapeId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="displayDrawingUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="drawingUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="isPublished" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="shapes">
+          <Key>
+            <PropertyRef Name="shapeId" />
+          </Key>
+          <Property Name="shapeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="displayShapeUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="shapeUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="levelNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="nchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_drawings_shapes">
+          <End Role="shapes" Type="Self.shapes" Multiplicity="1" />
+          <End Role="drawings" Type="Self.drawings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shapes">
+              <PropertyRef Name="shapeId" />
+            </Principal>
+            <Dependent Role="drawings">
+              <PropertyRef Name="shapeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_drawings_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="drawings" Type="Self.drawings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="drawings">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="addDrawing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nchar" Mode="In" />
+          <Parameter Name="shapeId" Type="int" Mode="In" />
+          <Parameter Name="userId" Type="int" Mode="In" />
+          <Parameter Name="displayDrawingUrl" Type="nvarchar" Mode="In" />
+          <Parameter Name="drawingUrl" Type="nvarchar" Mode="In" />
+          <Parameter Name="isPublished" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="addUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nchar" Mode="In" />
+          <Parameter Name="password" Type="nchar" Mode="In" />
+        </Function>
+        <Function Name="deleteDrawing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="drawingId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getDrawingsByShape" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shapeId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getDrawingsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getShape" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shapeId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getShapesAccordingToLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="level" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getShapesByLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="level" Type="int" Mode="In" />
+        </Function>
+        <Function Name="isUserExists" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nchar" Mode="In" />
+          <Parameter Name="password" Type="nchar" Mode="In" />
+        </Function>
+        <Function Name="updateDrawing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="drawingId" Type="int" Mode="In" />
+          <Parameter Name="isPublished" Type="bit" Mode="In" />
+        </Function>
+        <EntityContainer Name="CompleteMeDBModelStoreContainer">
+          <EntitySet Name="drawings" EntityType="Self.drawings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="shapes" EntityType="Self.shapes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_drawings_shapes" Association="Self.FK_drawings_shapes">
+            <End Role="shapes" EntitySet="shapes" />
+            <End Role="drawings" EntitySet="drawings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_drawings_users" Association="Self.FK_drawings_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="drawings" EntitySet="drawings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CompleteMeDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="drawing">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="shapeId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="displayDrawingUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="drawingUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isPublished" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="shape" Relationship="Self.FK_drawings_shapes" FromRole="drawings" ToRole="shapes" />
+          <NavigationProperty Name="user" Relationship="Self.FK_drawings_users" FromRole="drawings" ToRole="users" />
+        </EntityType>
+        <EntityType Name="shape">
+          <Key>
+            <PropertyRef Name="shapeId" />
+          </Key>
+          <Property Name="shapeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="displayShapeUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="shapeUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="levelNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="drawings" Relationship="Self.FK_drawings_shapes" FromRole="shapes" ToRole="drawings" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="drawings" Relationship="Self.FK_drawings_users" FromRole="users" ToRole="drawings" />
+        </EntityType>
+        <Association Name="FK_drawings_shapes">
+          <End Role="shapes" Type="Self.shape" Multiplicity="1" />
+          <End Role="drawings" Type="Self.drawing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shapes">
+              <PropertyRef Name="shapeId" />
+            </Principal>
+            <Dependent Role="drawings">
+              <PropertyRef Name="shapeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_drawings_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="drawings" Type="Self.drawing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="drawings">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CompleteMeDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="drawings" EntityType="Self.drawing" />
+          <EntitySet Name="shapes" EntityType="Self.shape" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK_drawings_shapes" Association="Self.FK_drawings_shapes">
+            <End Role="shapes" EntitySet="shapes" />
+            <End Role="drawings" EntitySet="drawings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_drawings_users" Association="Self.FK_drawings_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="drawings" EntitySet="drawings" />
+          </AssociationSet>
+          <FunctionImport Name="GetMyDrawing">
+          <Parameter Name="UserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="addDrawing" ReturnType="Collection(Decimal)">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="shapeId" Mode="In" Type="Int32" />
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+            <Parameter Name="displayDrawingUrl" Mode="In" Type="String" />
+            <Parameter Name="drawingUrl" Mode="In" Type="String" />
+            <Parameter Name="isPublished" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="addUser" ReturnType="Collection(Decimal)">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteDrawing">
+          <Parameter Name="drawingId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getDrawingByUser">
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getDrawingsByShape" ReturnType="Collection(CompleteMeDBModel.getDrawingsByShape_Result)">
+          <Parameter Name="shapeId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getShape" ReturnType="Collection(CompleteMeDBModel.getShape_Result)">
+          <Parameter Name="shapeId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetShapesByLevel" ReturnType="Collection(CompleteMeDBModel.getShapesByLevel_Result)">
+            <Parameter Name="level" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateDrawing">
+            <Parameter Name="drawingId" Mode="In" Type="Int32" />
+            <Parameter Name="isPublished" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="getShapesByLevel">
+          <Parameter Name="level" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getDrawingsByUser" ReturnType="Collection(CompleteMeDBModel.getDrawingsByUser_Result)">
+          <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getMyDrawing1">
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="isUserExists" ReturnType="Collection(Int32)">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getShapesAccordingToLevel" ReturnType="Collection(CompleteMeDBModel.getShapesAccordingToLevel_Result)">
+            <Parameter Name="level" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="getDrawingsByShape_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="shapeId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="false" />
+          <Property Type="String" Name="displayDrawingUrl" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="drawingUrl" Nullable="false" MaxLength="300" />
+          <Property Type="Boolean" Name="isPublished" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getShape_Result">
+          <Property Type="Int32" Name="shapeId" Nullable="false" />
+          <Property Type="String" Name="displayShapeUrl" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="shapeUrl" Nullable="false" MaxLength="300" />
+          <Property Type="Int32" Name="levelNumber" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getShapesByLevel_Result">
+          <Property Type="Int32" Name="shapeId" Nullable="false" />
+          <Property Type="String" Name="displayShapeUrl" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="shapeUrl" Nullable="false" MaxLength="300" />
+          <Property Type="Int32" Name="levelNumber" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getDrawingsByUser_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="shapeId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="false" />
+          <Property Type="String" Name="displayDrawingUrl" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="drawingUrl" Nullable="false" MaxLength="300" />
+          <Property Type="Boolean" Name="isPublished" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getShapesAccordingToLevel_Result">
+          <Property Type="Int32" Name="shapeId" Nullable="false" />
+          <Property Type="String" Name="displayShapeUrl" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="shapeUrl" Nullable="false" MaxLength="300" />
+          <Property Type="Int32" Name="levelNumber" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CompleteMeDBModelStoreContainer" CdmEntityContainer="CompleteMeDBEntities">
+          <EntitySetMapping Name="drawings">
+            <EntityTypeMapping TypeName="CompleteMeDBModel.drawing">
+              <MappingFragment StoreEntitySet="drawings">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="displayDrawingUrl" ColumnName="displayDrawingUrl" />
+                <ScalarProperty Name="drawingUrl" ColumnName="drawingUrl" />
+                <ScalarProperty Name="isPublished" ColumnName="isPublished" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="shapes">
+            <EntityTypeMapping TypeName="CompleteMeDBModel.shape">
+              <MappingFragment StoreEntitySet="shapes">
+                <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+                <ScalarProperty Name="displayShapeUrl" ColumnName="displayShapeUrl" />
+                <ScalarProperty Name="shapeUrl" ColumnName="shapeUrl" />
+                <ScalarProperty Name="levelNumber" ColumnName="levelNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="CompleteMeDBModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="addDrawing" FunctionName="CompleteMeDBModel.Store.addDrawing" />
+          <FunctionImportMapping FunctionImportName="addUser" FunctionName="CompleteMeDBModel.Store.addUser" />
+          <FunctionImportMapping FunctionImportName="deleteDrawing" FunctionName="CompleteMeDBModel.Store.deleteDrawing" />
+          <FunctionImportMapping FunctionImportName="getDrawingsByShape" FunctionName="CompleteMeDBModel.Store.getDrawingsByShape">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CompleteMeDBModel.getDrawingsByShape_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="displayDrawingUrl" ColumnName="displayDrawingUrl" />
+                <ScalarProperty Name="drawingUrl" ColumnName="drawingUrl" />
+                <ScalarProperty Name="isPublished" ColumnName="isPublished" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getShape" FunctionName="CompleteMeDBModel.Store.getShape">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CompleteMeDBModel.getShape_Result">
+                <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+                <ScalarProperty Name="displayShapeUrl" ColumnName="displayShapeUrl" />
+                <ScalarProperty Name="shapeUrl" ColumnName="shapeUrl" />
+                <ScalarProperty Name="levelNumber" ColumnName="levelNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updateDrawing" FunctionName="CompleteMeDBModel.Store.updateDrawing" />
+          <FunctionImportMapping FunctionImportName="getShapesByLevel" FunctionName="CompleteMeDBModel.Store.getShapesByLevel">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getDrawingsByUser" FunctionName="CompleteMeDBModel.Store.getDrawingsByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CompleteMeDBModel.getDrawingsByUser_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="displayDrawingUrl" ColumnName="displayDrawingUrl" />
+                <ScalarProperty Name="drawingUrl" ColumnName="drawingUrl" />
+                <ScalarProperty Name="isPublished" ColumnName="isPublished" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="isUserExists" FunctionName="CompleteMeDBModel.Store.isUserExists" />
+          <FunctionImportMapping FunctionImportName="getShapesAccordingToLevel" FunctionName="CompleteMeDBModel.Store.getShapesAccordingToLevel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CompleteMeDBModel.getShapesAccordingToLevel_Result">
+                <ScalarProperty Name="shapeId" ColumnName="shapeId" />
+                <ScalarProperty Name="displayShapeUrl" ColumnName="displayShapeUrl" />
+                <ScalarProperty Name="shapeUrl" ColumnName="shapeUrl" />
+                <ScalarProperty Name="levelNumber" ColumnName="levelNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

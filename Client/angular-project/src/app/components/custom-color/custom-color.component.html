@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>בחר צבע</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input type="color" value="data.color" matInput [(ngModel)]="data.color">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
+  <button (click)="addColor()" mat-button [mat-dialog-close]="data.color" cdkFocusInitial>אישור</button>
+</div>

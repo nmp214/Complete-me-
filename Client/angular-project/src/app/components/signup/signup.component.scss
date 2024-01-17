@@ -1,0 +1,29 @@
+body {
+    margin: 10px;
+}
+
+mat-dialog-content {
+    direction: rtl;
+    display: flex;
+    text-align: right;
+}
+
+h1 {
+    text-align: center;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup {
+    direction: rtl;
+    display: contents;
+}

@@ -1,0 +1,235 @@
+button {
+    cursor: url('../../../assets/brush-svgrepo-com.svg'), auto;
+}
+
+.draw-page {
+    direction: rtl;
+    height: 44.7em;
+    display: flex;
+}
+
+.right-side {
+    cursor: url('../../../assets/brush-svgrepo-com.svg'), auto;
+
+    background-color: black;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+// canvas{
+//     background-image: url('../../../assets/drawings/15.png');
+// }
+
+.left-side {
+    cursor: url('../../../assets/16713578361578982975.svg'), auto;
+
+    background-color: black;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    height: 12%;
+    margin-top: 10px;
+}
+
+.save {
+    margin: 5px;
+    height: 40px;
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+.content {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+canvas:hover {
+    cursor: pointer;
+}
+.drawing {
+    border-color: black;
+    border-radius: 0%;
+    border-width: 3px;
+    border-style: groove;
+    padding: 15px;
+    width: 95%;
+    height: 80%;
+    margin-right: 7px;
+    // background-image: url('../../../assets/drawings/13.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.drawing:hover {
+    cursor: url('../../../assets/brush.png'), auto;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px;
+}
+
+.share {
+    height: 50px;
+    width: 150px;
+}
+
+.colors {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.brushes {
+    display: flex;
+}
+
+.erase, .brush {
+    background-color: white;
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+}
+
+// .selected-color {
+//     width: 55px;
+//     height: 55px;
+//     background-color: "canvas.freeDrawingBrush.color";
+//     border-radius: 100%;
+//     border-color: #FFFFFF;
+//     border-width: 5px;
+//     margin: 5px;
+// }
+
+.all-colors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.determine-colors, .added-colors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+}
+
+.btn1,
+.btn2,
+.btn3,
+.btn4,
+.btn5,
+.btn6,
+.btn7,
+.btn8,
+.btn9,
+.btn10,
+.btn11,
+.btn12,
+.btn,
+.add-btn {
+    cursor: pointer;
+    margin: 4px;
+    border-radius: 100%;
+    border-color: #FFFFFF;
+    width: 40px;
+    height: 40px;
+}
+
+.btn1:hover,
+.btn2:hover,
+.btn3:hover,
+.btn4:hover,
+.btn5:hover,
+.btn6:hover,
+.btn7:hover,
+.btn8:hover,
+.btn9:hover,
+.btn10:hover,
+.btn11:hover,
+.btn12:hover {
+    box-shadow: 2px 3px 6px #C3C3C3;
+    opacity: 85%;
+}
+
+.btn1 {
+    background-color: #ED1C24;
+}
+
+.btn2 {
+    background-color: #FF7F27;
+}
+
+.btn3 {
+    background-color: #FFF200;
+}
+
+.btn4 {
+    background-color: #B5E61D;
+}
+
+.btn5 {
+    background-color: #22B14C;
+}
+
+.btn6 {
+    background-color: #99D9EA;
+}
+
+.btn7 {
+    background-color: #3F48CC;
+}
+
+.btn8 {
+    background-color: #C8BFE7;
+}
+
+.btn5 {
+    background-color: #A349A4;
+}
+
+.btn9 {
+    background-color: #FFAEC9;
+}
+
+.btn10 {
+    background-color: #B97A57;
+}
+
+.btn11 {
+    background-color: #C3C3C3;
+}
+
+.btn12 {
+    background-color: #000000;
+}
+
+.custom-color {
+    margin: 50px;
+}
+
+mat-slider {
+    direction: ltr;
+    margin: 5px;
+    margin-top: 10px;
+    width: 200px;
+}

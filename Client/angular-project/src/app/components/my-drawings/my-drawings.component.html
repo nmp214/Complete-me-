@@ -1,0 +1,21 @@
+<div class="my-drawings-page">
+    <div class="right-side">
+
+    </div>
+    <div class="content">
+        <h1 class="title">הציורים שלי</h1>
+        <div class="my-drawings">
+            <div class="drawing" *ngFor="let drawing of drawings">
+                <img src={{drawing}} alt="התמונה לא עלתה">
+            </div>
+        </div>
+        <div class="add">
+        <button class="add-drawing" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    </div>
+    <div class="left-side">
+        <img class="logo" src="../../../assets/complete me.png" />
+    </div>
+</div>

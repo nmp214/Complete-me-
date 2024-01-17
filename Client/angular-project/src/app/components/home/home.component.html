@@ -1,0 +1,46 @@
+<mat-toolbar class="my-color">
+    <img src="../../../assets/complete me.png" />
+
+    <span color="accent" class="example-spacer"></span>
+
+    <section>
+        <button mat-raised-button color="accent" class="my-button" (click)="openSignup()">הרשם</button>
+        <button mat-raised-button color="accent" class="my-button" (click)="openLogin()">הכנס</button>
+    </section>
+</mat-toolbar>
+<br>
+<div class="home">
+    <br>
+    <h2>בחרו את הציור שמעלה בכם ניצוץ של סקרנות,</h2>
+    <h2> הפעילו יצירתיות, עופו על כנפי הדמיון </h2>
+    <h1>ו- קדימה, המשיכו אותו!</h1>
+    <input type="file" (change)="handleFile($event)">
+    <mat-tab-group backgroundColor="primary">
+        <mat-tab label="מתחילים">
+            <mat-spinner *ngIf="inProgress"></mat-spinner>
+            <div class="shapes">
+                <div class="shape" *ngFor="let shape of begginers">
+                    <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}
+                        alt="התמונה לא עלתה">
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="מתקדמים">
+            <div class="shapes">
+                <div class="shape" *ngFor="let shape of advanced">
+                    <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}
+                        alt="התמונה לא עלתה">
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="אתגר">
+            <div class="shapes">
+                <div class="shape" *ngFor="let shape of challenge">
+                    <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}
+                        alt="התמונה לא עלתה">
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>

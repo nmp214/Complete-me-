@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CompleteMeDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="drawings">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="name" Type="nchar" MaxLength="30" />
+    <Property Name="shapeId" Type="int" Nullable="false" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="displayDrawingUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="drawingUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="isPublished" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="shapes">
+    <Key>
+      <PropertyRef Name="shapeId" />
+    </Key>
+    <Property Name="shapeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="displayShapeUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="shapeUrl" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="levelNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="name" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="password" Type="nchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_drawings_shapes">
+    <End Role="shapes" Type="Self.shapes" Multiplicity="1" />
+    <End Role="drawings" Type="Self.drawings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="shapes">
+        <PropertyRef Name="shapeId" />
+      </Principal>
+      <Dependent Role="drawings">
+        <PropertyRef Name="shapeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_drawings_users">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="drawings" Type="Self.drawings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="drawings">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="addDrawing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name" Type="nchar" Mode="In" />
+    <Parameter Name="shapeId" Type="int" Mode="In" />
+    <Parameter Name="userId" Type="int" Mode="In" />
+    <Parameter Name="displayDrawingUrl" Type="nvarchar" Mode="In" />
+    <Parameter Name="drawingUrl" Type="nvarchar" Mode="In" />
+    <Parameter Name="isPublished" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="addUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name" Type="nchar" Mode="In" />
+    <Parameter Name="password" Type="nchar" Mode="In" />
+  </Function>
+  <Function Name="deleteDrawing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="drawingId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getDrawingsByShape" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="shapeId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getDrawingsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getShape" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="shapeId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getShapesAccordingToLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="level" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getShapesByLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="level" Type="int" Mode="In" />
+  </Function>
+  <Function Name="isUserExists" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name" Type="nchar" Mode="In" />
+    <Parameter Name="password" Type="nchar" Mode="In" />
+  </Function>
+  <Function Name="updateDrawing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="drawingId" Type="int" Mode="In" />
+    <Parameter Name="isPublished" Type="bit" Mode="In" />
+  </Function>
+  <EntityContainer Name="CompleteMeDBModelStoreContainer">
+    <EntitySet Name="drawings" EntityType="Self.drawings" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="shapes" EntityType="Self.shapes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_drawings_shapes" Association="Self.FK_drawings_shapes">
+      <End Role="shapes" EntitySet="shapes" />
+      <End Role="drawings" EntitySet="drawings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_drawings_users" Association="Self.FK_drawings_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="drawings" EntitySet="drawings" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
