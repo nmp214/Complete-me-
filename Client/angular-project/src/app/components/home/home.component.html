@@ -17,7 +17,9 @@
     <input type="file" (change)="handleFile($event)">
     <mat-tab-group backgroundColor="primary">
         <mat-tab label="מתחילים">
-            <mat-spinner *ngIf="inProgress"></mat-spinner>
+            <div>
+                <mat-spinner *ngIf="inProgress"></mat-spinner>
+            </div>
             <div class="shapes">
                 <div class="shape" *ngFor="let shape of begginers">
                     <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}

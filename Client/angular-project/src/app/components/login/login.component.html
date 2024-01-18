@@ -6,8 +6,8 @@
         <input matInput [(ngModel)]="data.name">
     </mat-form-field>
     <mat-form-field>
-        <mat-label>סיסמה </mat-label>
-        <input matInput [(ngModel)]="data.animal" [type]="hide ? 'password' : 'text'">
+        <mat-label>סיסמה</mat-label>
+        <input matInput [(ngModel)]="data.password" [type]="hide ? 'password' : 'text'">
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide">
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -15,7 +15,7 @@
     </mat-form-field>
 </div>
 <div class="actions" mat-dialog-actions>
-    <button mat-raised-button color="primary" mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>הכנס</button>
+    <button mat-raised-button color="primary" mat-button [mat-dialog-close]="data.password" cdkFocusInitial>הכנס</button>
     <br>
     <div class="signup">
         <h4>אין לך עדיין חשבון?</h4>

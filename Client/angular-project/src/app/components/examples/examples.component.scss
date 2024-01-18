@@ -53,14 +53,21 @@
 
 .example {
     background-color: white;
+    margin: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.image {
     width: 200px;
     height: 140px;
-    margin: 12px;
-    cursor: pointer;
-    border-radius: 40px;
+     border-radius: 40px;
     border-color: black;
     border-width: 3px;
     border-style: solid;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,4 +84,8 @@
     border-color: #FFFFFF;
     width: 60px;
     height: 60px;
+}
+
+img {
+    width: 183px;
 }

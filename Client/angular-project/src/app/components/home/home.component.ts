@@ -18,9 +18,9 @@ import { HttpService } from '../../services/http.service';
 import { Shape } from '../../classes/shape';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-export interface DialogData {
-  animal: string;
+export interface AuthData {
   name: string;
+  password: string;
 }
 
 @Component({

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Inject } from '@angular/core';
 import {
-  MatDialog,
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogTitle,
@@ -13,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogData } from '../home/home.component';
+import { AuthData } from '../home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -39,7 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class LoginComponent {
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: AuthData,
   ) { }
   hide = true;
 

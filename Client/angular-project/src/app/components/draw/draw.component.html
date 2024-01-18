@@ -41,11 +41,6 @@
                 <button class="add-btn" (click)="customColor()">
                     <mat-icon>add</mat-icon>
                 </button>
-                <!-- <input class="custom-color" type="color" (click)="changeColor($event)" [(ngModel)]="selectedColor"
-                        #colorInput style="display: none;" />
-                    <button class="add-btn" (click)="colorInput.click()">
-                        <mat-icon>add</mat-icon>
-                    </button> -->
             </div>
             <div class="added-colors">
                 <div *ngFor="let color of customColors">
@@ -53,32 +48,56 @@
                         (click)="changeColor($event)"></button>
                 </div>
             </div>
-
-            <!-- </div> -->
-            <mat-slider (click)="changeWidth($event)" min="2" max="40" step="4" value="1" [displayWith]="formatLabel"
+            <mat-slider (click)="changeWidth($event)" min="1" max="40" step="4" value="1" [displayWith]="formatLabel"
                 discrete>
                 <input matSliderThumb [(ngModel)]="selectedWidth" #slider>
             </mat-slider>
-            <button mat-raised-button color="primary" (click)="clear()">אפס</button>
+            <div class="more-actions">
+                <button mat-raised-button color="primary" (click)="clear()">אפס</button>
+                <button *ngIf="!isFillMode" (click)="toggleFillMode()" mat-mini-fab matTooltip="Accent" color="primary"
+                    aria-label="Example icon-button with a heart icon">
+                    <mat-icon>format_color_fill</mat-icon>
+                </button>
+                <button *ngIf="isFillMode" (click)="toggleFillMode()" mat-mini-fab matTooltip="Accent" color="primary"
+                    aria-label="Example icon-button with a heart icon">
+                    <mat-icon>brush</mat-icon>
+                </button>
+            </div>
         </div>
         <button class="share" mat-raised-button color="accent">רוצה לשתף <br> אחרים בציור?</button>
     </div>
     <div class="content">
-        <audio controls>
-            <source src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/shapes%2F_%D7%95%D7%9E%D7%AA%D7%A7%D7%93%D7%A9_%20I%20%D7%9E%D7%95%D7%98%D7%99%20%D7%A9%D7%98%D7%99%D7%99%D7%A0%D7%9E%D7%A5%20I%20%D7%9E%D7%A7%D7%94%D7%9C%D7%AA%20%D7%9E%D7%9C%D7%9B%D7%95%D7%AA%20I%20%D7%93%D7%A8%D7%A9%D7%95%20U'miskadesh%20I%20Motty%20Steinmetz%20I%20Malchut%20I%20Dirshu%20I.wav?alt=media&token=00d69c01-bc48-46a0-beba-7803a0e069b2" type="audio/mpeg">
-          Your browser does not support the audio element.
-          </audio>
-        <div #screen class="drawing">
-            <canvas id="canvas" width="1020" height="580"></canvas>
+        <audio #audioPlayer>
+            <!-- <source src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/shapes%2F_%D7%95%D7%9E%D7%AA%D7%A7%D7%93%D7%A9_%20I%20%D7%9E%D7%95%D7%98%D7%99%20%D7%A9%D7%98%D7%99%D7%99%D7%A0%D7%9E%D7%A5%20I%20%D7%9E%D7%A7%D7%94%D7%9C%D7%AA%20%D7%9E%D7%9C%D7%9B%D7%95%D7%AA%20I%20%D7%93%D7%A8%D7%A9%D7%95%20U'miskadesh%20I%20Motty%20Steinmetz%20I%20Malchut%20I%20Dirshu%20I.wav?alt=media&token=00d69c01-bc48-46a0-beba-7803a0e069b2" type="audio/mpeg"> -->
+            <source
+                src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/music%2FI%20pray%20%D7%90%D7%A4%D7%A8%D7%AA%20%D7%A4%D7%A1%D7%A0%D7%AA%D7%A8.mp3?alt=media&token=1a430250-5188-4afa-8638-d7131cd42fee"
+                type="audio/mpeg">
+            <source
+                src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/music%2FPeace%20wanted%20to%20be%20free%20%D7%90%D7%A4%D7%A8%D7%AA%20%D7%A4%D7%A1%D7%A0%D7%AA%D7%A8.mp3?alt=media&token=6a821b3d-1574-4a56-bf24-33674bd32a99"
+                type="audio/mpeg">
+            <source
+                src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/music%2F%D7%90%D7%99%D7%99%D7%93%D7%9C%D7%95%D7%95%D7%99%D7%A1%20%D7%90%D7%A4%D7%A8%D7%AA%20%D7%A4%D7%A1%D7%A0%D7%AA%D7%A8.mp3?alt=media&token=48b40366-6465-4d25-b346-799d0582e137"
+                type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="drawing">
+            <canvas #screen id="canvas" width="1020" height="580"></canvas>
             <mat-spinner *ngIf="inProgress"></mat-spinner>
         </div>
         <div class="actions">
             <!-- <button (click)="toggleDrawMode()">Toggle Draw Mode</button> -->
             <!-- <button (click)="toggleFillMode()"> Toggle Fill Mode</button> -->
-                <button (click)="toggleFillMode()" mat-icon-button matTooltip="Basic" aria-label="Example icon-button with a heart icon">
-                    <mat-icon> format_color_fill</mat-icon>
-                  </button>
+
+
             <button mat-raised-button color="warn" (click)="openExamples()">דוגמאות</button>
+            <button *ngIf="isPlaying" (click)="pauseAudio()" mat-fab matTooltip="Accent" color="accent"
+                aria-label="Example icon-button with a heart icon">
+                <mat-icon>music_note</mat-icon>
+            </button>
+            <button *ngIf="!isPlaying" (click)="playAudio()" mat-fab matTooltip="Accent" color="accent"
+                aria-label="Example icon-button with a heart icon">
+                <mat-icon>music_off</mat-icon>
+            </button>
             <button mat-raised-button color="warn" (click)="openMyDrawings()">הציורים שלי</button>
         </div>
     </div>

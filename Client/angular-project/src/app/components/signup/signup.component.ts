@@ -13,8 +13,9 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogData } from '../home/home.component';
+import { AuthData } from '../home/home.component';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpService } from '../../services/http.service';
 
 @Component({
   selector: 'app-signup',
@@ -37,10 +38,15 @@ import { MatIconModule } from '@angular/material/icon';
 export class SignupComponent {
   constructor(
     public dialogRef: MatDialogRef<SignupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: AuthData,
+    private httpService: HttpService
   ) { }
   hide = true;
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  signup() {
+    this.httpService.addUser(this.data.name, this.data.password)
   }
 }

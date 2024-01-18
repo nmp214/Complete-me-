@@ -6,7 +6,7 @@
         <h1 class="title">הציורים שלי</h1>
         <div class="my-drawings">
             <div class="drawing" *ngFor="let drawing of drawings">
-                <img src={{drawing}} alt="התמונה לא עלתה">
+                <img src={{drawing.displayDrawingUrl}} alt="התמונה לא עלתה">
             </div>
         </div>
         <div class="add">

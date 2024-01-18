@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Shape } from '../classes/shape';
 import { Drawing } from '../classes/drawing';
+import { User } from '../classes/user';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,9 @@ export class HttpService {
   deleteDrawing(drawingId: number) {
     let param: any = { 'drawingId': drawingId };
     this.http.delete<Drawing>(`${this.url}/drawings`, { params: param });
+  }
+
+  addUser(name: string, password: string) {
+    this.http.post<User>(`${this.url}/users`, { name, password });
   }
 }

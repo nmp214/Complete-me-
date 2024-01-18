@@ -27,7 +27,7 @@ const storage = getStorage();
 
 export const upload = async (file: File) => {
     console.log('file in upload: ', file);
-    const storageRef = ref(storage, `shapes/${file.name}`);
+    const storageRef = ref(storage, `drawings/${file.name}`);
     const metadata = {
         contentType: 'mp3',
     };
@@ -41,7 +41,7 @@ export const upload = async (file: File) => {
 }
 
 export const download = async (name: string): Promise<string> => {
-    const URL: any = await getDownloadURL(ref(storage, `shapes/${name}`))
+    const URL: any = await getDownloadURL(ref(storage, `drawings/${name}`))
         .then((url) => {
             return url;
         })

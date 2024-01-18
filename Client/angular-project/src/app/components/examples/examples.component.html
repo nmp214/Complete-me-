@@ -6,14 +6,19 @@
         <h1 class="title">דוגמאות</h1>
         <div class="examples">
             <div class="example" *ngFor="let drawing of drawings">
-                <img src={{drawing}} alt="התמונה לא עלתה">
+                <h5>{{drawing.name}}</h5>
+                <div class="image">
+                <img src={{drawing.displayDrawingUrl}} alt="התמונה לא עלתה">
+            </div>
             </div>
         </div>
+        <!-- <canvas id="canvas">canvas</canvas> -->
         <div class="add">
-        <button class="add-example" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
+            <button title="רוצה להוסיף משלך?" (click)="add()" class="add-example" mat-mini-fab color="accent"
+                aria-label="Example icon button with a plus one icon">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
     </div>
     <div class="left-side">
         <img class="logo" src="../../../assets/complete me.png" />

@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogData } from '../home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({

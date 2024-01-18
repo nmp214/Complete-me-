@@ -39,6 +39,9 @@ export class DrawComponent implements OnInit {
   @Output()
   changeSelectedColor: EventEmitter<string> = new EventEmitter<string>();
 
+  @ViewChild('audioPlayer') audioPlayer!: ElementRef;
+  isPlaying: boolean = true;
+
   shapeId: number = 0;
   currentShape: Shape = new Shape();
   url?: string;
@@ -87,6 +90,7 @@ export class DrawComponent implements OnInit {
     this.httpService.getShape(this.shapeId).subscribe((shape: any) => {
       console.log('shape: ', shape);
       this.currentShape = shape[0];
+
       fabric.Image.fromURL(this.currentShape.shapeUrl, (img) => {
         img.set({ selectable: false });
         img.set({ crossOrigin: 'Anonymous' });
@@ -103,46 +107,57 @@ export class DrawComponent implements OnInit {
     this.canvas.on('mouse:move', (event) => this.handleMouseMove(event));
     this.canvas.on('mouse:up', () => this.handleMouseUp());
 
+
   }
 
   ngAfterViewInit(): void {
+    // this.playNextAudio();
 
     this.canvas.freeDrawingBrush.width = this.selectedWidth;
     this.canvas.freeDrawingBrush.color = this.selectedColor;
     this.showSelectedColor();
     console.log('currentShape: ', this.currentShape);
 
-    // this.canvas.on('path:created', (event: any) => {
-    //   const path = event.path;
-    //   path.set({ selectable: true });
+    this.canvas.on('path:created', (event: any) => {
+      const path = event.path;
+      path.set({ selectable: true });
 
-    //   this.canvas.add(path);
-    //   const backgroundImage = this.canvas.backgroundImage;
-    //   if (backgroundImage) {
-    //     this.canvas.bringToFront(backgroundImage as fabric.Object);
-    //   }
-    // });
-
-    // this.canvas.on('selection:created', (event) => {
-    //   const selection = event.target;
-    //   if (selection instanceof fabric.ActiveSelection) {
-    //     selection.set({ selectable: false });
-    //   }
-    // });
-
-
-    const rect = new fabric.Rect({
-      left: 0,
-      top: 0,
-      width: this.canvas.width,
-      height: this.canvas.height,
-      fill: 'white'
+      this.canvas.add(path);
+      const backgroundImage = this.canvas.backgroundImage;
+      if (backgroundImage) {
+        this.canvas.bringToFront(backgroundImage as fabric.Object);
+      }
     });
 
-    this.canvas.add(rect);
+    this.canvas.on('selection:created', (event) => {
+      const selection = event.target;
+      if (selection instanceof fabric.ActiveSelection) {
+        selection.set({ selectable: false });
+      }
+    });
+
+
+
   }
 
 
+  playNextAudio() {
+    const audioElement: HTMLAudioElement = this.audioPlayer.nativeElement;
+    const sources: HTMLSourceElement[] = Array.from(audioElement.getElementsByTagName('source'));
+    console.log('sources', sources);
+    let currentSourceIndex = 0;
+
+    audioElement.addEventListener('ended', () => {
+      currentSourceIndex = (currentSourceIndex + 1) % sources.length;
+      console.log('currentSourceIndex', currentSourceIndex);
+      audioElement.src = sources[currentSourceIndex].src;
+      audioElement.load();
+      audioElement.play();
+    });
+
+    // Start playing the first audio
+    audioElement.play();
+  }
 
   changeKind(event: any) {
     console.log(this.canvas.backgroundColor);
@@ -163,12 +178,14 @@ export class DrawComponent implements OnInit {
 
   clear() {
     this.canvas.clear();
+    this.inProgress = true;
     fabric.Image.fromURL(this.currentShape.shapeUrl, (img) => {
       img.set({ crossOrigin: 'anonymous' });
       this.image = img;
       img.set({ selectable: false });
       this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
       this.canvas.bringToFront(img);
+      this.inProgress = false;
     });
   }
 
@@ -259,10 +276,14 @@ export class DrawComponent implements OnInit {
     html2canvas(this.screen.nativeElement,
       {
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
       }).then((canvas) => {
         // canvas.setAttribute('crossOrigin', 'anonymous');
         console.log(canvas.toDataURL());
+
+        // Check if canvas has a background image
+        console.log("Canvas background image:", getComputedStyle(this.screen.nativeElement).backgroundImage);
+
         this.scncanvas.nativeElement.src = canvas.toDataURL();
         this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
         this.downloadLink.nativeElement.download = 'marble-diagram.png';
@@ -276,55 +297,85 @@ export class DrawComponent implements OnInit {
     // }
   }
 
-  openExamples(): void {
-    this.router.navigate(['/examples']);
-  }
+  // download() {
+  //   // Serialize the canvas objects excluding the background image
+  //   const serializedData = JSON.stringify({
+  //     objects: this.canvas.getObjects().filter((object) => object !== this.image.toJSON())
+  //   });
+  
+  //   // Create a new canvas
+  //   const drawingsCanvas = new fabric.Canvas(null);
+  
+  //   // Load the serialized data onto the new canvas
+  //   drawingsCanvas.loadFromJSON(serializedData, () => {
+  //     // Create a data URL for the drawings-only canvas and trigger download
+  //     const downloadLink = document.createElement('a');
+  //     downloadLink.href = drawingsCanvas.toDataURL({ format: 'png', multiplier: 2 });
+  //     downloadLink.download = 'drawings-only.png';
+  //     downloadLink.click();
+  //   });
+  // }
+  
 
-  openMyDrawings(): void {
-    this.router.navigate(['/my-drawings']);
-  }
 
 
+    openExamples(): void {
+      this.router.navigate(['/examples', { shapeId: this.currentShape.shapeId }]);
+    }
+
+    openMyDrawings(): void {
+      this.router.navigate(['/my-drawings', { shapeId: this.currentShape.shapeId }]);
+    }
 
 
+    pauseAudio() {
+      this.audioPlayer.nativeElement.pause();
+      this.isPlaying = false;
+    }
 
-  changeFillMode() {
-    this.isFillMode = !this.isFillMode;
-    console.log('fill mode: ', this.isFillMode);
-  }
+    playAudio() {
+      this.audioPlayer.nativeElement.play();
+      this.isPlaying = true;
+    }
 
-  isDrawing: boolean = false;
 
-  toggleDrawMode(): void {
-    this.isDrawing = !this.isDrawing;
-    this.canvas.isDrawingMode = this.isDrawing;
-    console.log('isDrawMode', this.isDrawing);
-  }
+    changeFillMode() {
+      this.isFillMode = !this.isFillMode;
+      console.log('fill mode: ', this.isFillMode);
+    }
 
-  toggleFillMode(): void {
-    this.isFillMode = !this.isFillMode;
-    console.log('fill mode: ', this.isFillMode);
-  }
+    isDrawing: boolean = false;
 
-  handleMouseMove(event: fabric.IEvent): void {
-    // Additional drawing functionality can be added here
-  }
+    toggleDrawMode(): void {
+      this.isDrawing = !this.isDrawing;
+      this.canvas.isDrawingMode = this.isDrawing;
+      console.log('isDrawMode', this.isDrawing);
+    }
 
-  handleMouseUp(): void {
-    // Additional handling on mouse up can be added here
-  }
+    toggleFillMode(): void {
+      this.isFillMode = !this.isFillMode;
+      console.log('fill mode: ', this.isFillMode);
+    }
 
-  handleMouseDown(event: fabric.IEvent): void {
-    if (this.isFillMode) {
+    handleMouseMove(event: fabric.IEvent): void {
+      // Additional drawing functionality can be added here
+    }
+
+    handleMouseUp(): void {
+      // Additional handling on mouse up can be added here
+    }
+
+    handleMouseDown(event: fabric.IEvent): void {
+      if(this.isFillMode) {
       this.canvas.selection = false;
       const pointer = this.canvas.getPointer(event.e);
-  
+
       // Create a mock event object with x and y properties
       const mockEvent = { clientX: pointer.x, clientY: pointer.y } as MouseEvent;
-  
+
       // Find the target object at the clicked position
       const clickedObject = this.canvas.findTarget(mockEvent, true);
-  
+
       // Check if an object was clicked
       if (clickedObject instanceof fabric.Object) {
         // Fill the clicked object with the selected color
@@ -332,6 +383,10 @@ export class DrawComponent implements OnInit {
         this.canvas.renderAll();
       }
     }
+    const backgroundImage = this.canvas.backgroundImage;
+      if (backgroundImage) {
+        this.canvas.bringToFront(backgroundImage as fabric.Object);
+      }
   }
 
 }

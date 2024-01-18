@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Mvc;
 
 namespace Server.Controllers
 {
@@ -28,23 +29,6 @@ namespace Server.Controllers
             Context = context;
         }
 
-        // GET api/values/userId
-        //public IEnumerable<string> GetDrawingsByUser(int userId)
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/values/shapeId
-        //public IEnumerable<shape> GetUser(int shapeId)
-        //{
-        //    return new shape[] { };
-        //}
-
-        //// GET api/values/5
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/values
         [HttpPost]
@@ -53,6 +37,11 @@ namespace Server.Controllers
             Context.addUser(name, password);
         }
 
+        [HttpPost]
+        public ActionResult<string> Login([FromBody] user user)
+        {
+            user newUser;
+        }
 
         //// POST api/values
         //[HttpPost]
