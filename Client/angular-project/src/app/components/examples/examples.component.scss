@@ -19,11 +19,14 @@
     width: 15%;
     height: 100%;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
-    height: 12%;
     margin-top: 10px;
+    cursor: pointer;
 }
 
 .content {
@@ -49,6 +52,13 @@
     margin: 15px;
     margin-top: 50px;
     height: 80%;
+    justify-content: center;
+
+}
+
+.no-examples {
+    text-align: center;
+    font-family: 'MyFont';
 }
 
 .example {
@@ -63,7 +73,7 @@
 .image {
     width: 200px;
     height: 140px;
-     border-radius: 40px;
+    border-radius: 40px;
     border-color: black;
     border-width: 3px;
     border-style: solid;
@@ -71,6 +81,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.example:hover .black-screen {
+    opacity: 30%;
+}
+
+.black-screen {
+    background-color: black;
+    position: absolute;
+    opacity: 0;
+    width: 200px;
+    height: 140px;
+    // width: 210px;
+    // height: 150px;
+    margin: 12px;
+    border-radius: 40px;
+    // border-color: black;
+    border-width: 3px;
+    border-style: solid;
+    transition: opacity 0.5s ease;
+
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // span {
+    //     color: rgb(0, 0, 0);
+    //     display: inline-block;
+    //     // -webkit-text-stroke: 2px black; 
+    // }
 }
 
 .add {
@@ -88,4 +127,10 @@
 
 img {
     width: 183px;
+}
+
+span {
+    -webkit-text-stroke: 2px black; // For WebKit browsers (Chrome, Safari)
+    // text-stroke: 2px black; // Standard syntax
+    color: white;
 }

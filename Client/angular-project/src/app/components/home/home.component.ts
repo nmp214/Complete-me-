@@ -101,6 +101,11 @@ export class HomeComponent {
     this.router.navigate(['/draw', { shapeId: id }]);
   }
 
+  openExample(id: any): void { 
+    console.log('id: ', id);
+    this.router.navigate(['/examples', { shapeId: id }]);
+  }
+
   handleFile(event: any) {
     const file = event.target.files[0];
     console.log(file);

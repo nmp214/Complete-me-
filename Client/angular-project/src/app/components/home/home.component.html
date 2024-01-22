@@ -14,16 +14,24 @@
     <h2>בחרו את הציור שמעלה בכם ניצוץ של סקרנות,</h2>
     <h2> הפעילו יצירתיות, עופו על כנפי הדמיון </h2>
     <h1>ו- קדימה, המשיכו אותו!</h1>
+    <!-- <div class="trigger-element">Hover me!</div> -->
+    <!-- <div class="change-element">I will change!</div> -->
+
     <input type="file" (change)="handleFile($event)">
     <mat-tab-group backgroundColor="primary">
         <mat-tab label="מתחילים">
-            <div>
+            <div style="align-items: center;">
                 <mat-spinner *ngIf="inProgress"></mat-spinner>
             </div>
             <div class="shapes">
                 <div class="shape" *ngFor="let shape of begginers">
                     <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}
                         alt="התמונה לא עלתה">
+                    <div id={{shape.shapeId}} (click)="openDrawing($event)" class="black-screen"></div>
+                        <button id={{shape.shapeId}} class="examples" mat-fab extended color="warn"
+                        (click)="openExample(shape.shapeId)">
+                        דוגמאות
+                    </button>
                 </div>
             </div>
         </mat-tab>
@@ -32,6 +40,11 @@
                 <div class="shape" *ngFor="let shape of advanced">
                     <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}
                         alt="התמונה לא עלתה">
+                        <div id={{shape.shapeId}} (click)="openDrawing($event)" class="black-screen"></div>
+                    <button id={{shape.shapeId}} class="examples" mat-fab extended color="warn"
+                        (click)="openExample(shape.shapeId)">
+                        דוגמאות
+                    </button>
                 </div>
             </div>
         </mat-tab>
@@ -40,6 +53,11 @@
                 <div class="shape" *ngFor="let shape of challenge">
                     <img id={{shape.shapeId}} (click)="openDrawing($event)" src={{shape.displayShapeUrl}}
                         alt="התמונה לא עלתה">
+                        <div id={{shape.shapeId}} (click)="openDrawing($event)" class="black-screen"></div>
+                    <button id={{shape.shapeId}} class="examples" mat-fab extended color="warn"
+                        (click)="openExample(shape.shapeId)">
+                        דוגמאות
+                    </button>
                 </div>
             </div>
         </mat-tab>

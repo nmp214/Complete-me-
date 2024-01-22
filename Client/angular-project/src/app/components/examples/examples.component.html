@@ -5,12 +5,20 @@
     <div class="content">
         <h1 class="title">דוגמאות</h1>
         <div class="examples">
+            <div class="no-examples" *ngIf="drawings.length === 0">
+                <h2>עדיין אין דוגמאות לצורה זו. נשמח אם תהיה הראשון!</h2>
+            </div>
             <div class="example" *ngFor="let drawing of drawings">
                 <h5>{{drawing.name}}</h5>
                 <div class="image">
-                <img src={{drawing.displayDrawingUrl}} alt="התמונה לא עלתה">
+                    <img src={{drawing.displayDrawingUrl}} alt="התמונה לא עלתה" (click)="openImage(drawing.drawingUrl)">
+                    <!-- <div class="black-screen">
+                        <span>{{drawing.name}}</span>
+                    </div> -->
+                </div>
             </div>
-            </div>
+            <mat-spinner style="position: absolute;" *ngIf="inProgress"></mat-spinner>
+
         </div>
         <!-- <canvas id="canvas">canvas</canvas> -->
         <div class="add">
@@ -21,6 +29,6 @@
         </div>
     </div>
     <div class="left-side">
-        <img class="logo" src="../../../assets/complete me.png" />
+        <img class="logo" src="../../../assets/complete me.png" (click)="toHome()" />
     </div>
 </div>

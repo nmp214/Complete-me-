@@ -15,11 +15,11 @@
     </mat-form-field>
 </div>
 <div class="actions" mat-dialog-actions>
-    <button mat-raised-button color="primary" mat-button [mat-dialog-close]="data.password" cdkFocusInitial>הכנס</button>
+    <button (click)="login()" mat-raised-button color="primary" mat-button [mat-dialog-close]="data.password" cdkFocusInitial>הכנס</button>
     <br>
     <div class="signup">
         <h4>אין לך עדיין חשבון?</h4>
-        <button mat-raised-button color="primary" mat-button (click)="onNoClick()">הרשם</button>
+        <button mat-raised-button color="primary" mat-button (click)="signup()">הרשם</button>
     </div>
     <br>
 </div>

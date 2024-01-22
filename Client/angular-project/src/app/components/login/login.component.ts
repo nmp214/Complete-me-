@@ -14,6 +14,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthData } from '../home/home.component';
 import { MatIconModule } from '@angular/material/icon';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { SignupComponent } from '../signup/signup.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -36,11 +43,30 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  constructor(
+  constructor(private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<LoginComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AuthData,
   ) { }
   hide = true;
+
+  login() {
+    this._snackBar.open(`שלום ${this.data.name} `, '', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 3000,
+    });
+  }
+
+  signup() {
+    const dialogRef = this.dialog.open(SignupComponent, {
+      data: { name: '', animal: '' },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

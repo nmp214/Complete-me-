@@ -16,6 +16,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthData } from '../home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpService } from '../../services/http.service';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signup',
@@ -36,7 +41,7 @@ import { HttpService } from '../../services/http.service';
   styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
-  constructor(
+  constructor(private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<SignupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AuthData,
     private httpService: HttpService
@@ -47,6 +52,11 @@ export class SignupComponent {
   }
 
   signup() {
-    this.httpService.addUser(this.data.name, this.data.password)
+    this.httpService.addUser(this.data.name, this.data.password);
+    this._snackBar.open(`שלום ${this.data.name} `, '', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 3000,
+    });
   }
 }

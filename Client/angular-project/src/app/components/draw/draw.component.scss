@@ -25,8 +25,7 @@ button {
 // }
 
 .left-side {
-    cursor: url('../../../assets/16713578361578982975.svg'), auto;
-
+    // cursor: url('../../../assets/16713578361578982975.svg'), auto;
     background-color: black;
     width: 15%;
     height: 100%;
@@ -39,6 +38,11 @@ button {
 .logo {
     height: 12%;
     margin-top: 10px;
+    cursor: pointer;
+}
+
+.do {
+    margin: 5px;
 }
 
 .save {
@@ -54,6 +58,8 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-content: space-around;
+    flex-wrap: wrap;
 }
 
 canvas:hover {
@@ -64,13 +70,18 @@ canvas:hover {
     border-radius: 0%;
     border-width: 3px;
     border-style: groove;
-    padding: 15px;
-    width: 95%;
-    height: 80%;
-    margin-right: 7px;
+    // padding: 15px;
+    // padding-bottom: 7.5px;
+    // padding-left: 10px;
+    width: 96%;
+    height: 81%;
+    // margin-right: 7px;
     // background-image: url('../../../assets/drawings/13.png');
     background-repeat: no-repeat;
     background-size: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .drawing:hover {
@@ -172,9 +183,11 @@ img {
 .btn9:hover,
 .btn10:hover,
 .btn11:hover,
-.btn12:hover {
-    box-shadow: 2px 3px 6px #C3C3C3;
-    opacity: 85%;
+.btn12:hover,
+.add-btn:hover {
+    // box-shadow: 2px 3px 6px #C3C3C3;
+    // opacity: 85%;
+    filter: brightness(1.2); 
 }
 
 .btn1 {

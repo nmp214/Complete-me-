@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +18,12 @@ import { CustomColorComponent } from '../custom-color/custom-color.component';
 import { CommonModule } from '@angular/common';
 import html2canvas from 'html2canvas';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ShareDrawingComponent } from '../share-drawing/share-drawing.component';
+
+export interface save {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-draw',
@@ -40,13 +46,17 @@ export class DrawComponent implements OnInit {
   changeSelectedColor: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('audioPlayer') audioPlayer!: ElementRef;
+  @ViewChild('screen') screen!: ElementRef;
+  @ViewChild('scncanvas') scncanvas!: ElementRef;
+  @ViewChild('downloadLink') downloadLink!: ElementRef;
   isPlaying: boolean = true;
 
   shapeId: number = 0;
+  drawingName: string = '';
   currentShape: Shape = new Shape();
   url?: string;
 
-  private canvas!: fabric.Canvas;
+  private canvas: fabric.Canvas;
 
   public circle: fabric.StaticCanvas = new fabric.StaticCanvas('circle', {
     width: 100,
@@ -56,13 +66,16 @@ export class DrawComponent implements OnInit {
   selectedColor: string = '#000000';
   selectedWidth: number = 6;
   isBrush: boolean = true;
-  brush?: string;
+  brush: string = 'brush';
   customColors: string[] = ['#464444', '#464444', '#464444', '#464444', '#464444', '#464444', '#464444', '#464444'];
   index: number = 0;
   custom?: string;
   image: any;
   inProgress: boolean = true;
   isFillMode: boolean = false;
+
+  private undoStack: string[] = [];
+  private redoStack: string[] = [];
 
   // erasingMode: boolean = false;
   // originalBackgroundColor: string | null = null;
@@ -78,6 +91,9 @@ export class DrawComponent implements OnInit {
     this.canvas = new fabric.Canvas('canvas');
     this.canvas.freeDrawingBrush.width = this.selectedWidth;
     this.canvas.freeDrawingBrush.color = this.selectedColor;
+
+    this.setupUndoRedo();
+
   }
 
   ngOnInit() {
@@ -86,6 +102,9 @@ export class DrawComponent implements OnInit {
       selection: false,
 
     });
+    this.setupUndoRedo();
+    this.saveCanvasState();
+
     console.log('shapeId: ', this.shapeId);
     this.httpService.getShape(this.shapeId).subscribe((shape: any) => {
       console.log('shape: ', shape);
@@ -93,15 +112,18 @@ export class DrawComponent implements OnInit {
 
       fabric.Image.fromURL(this.currentShape.shapeUrl, (img) => {
         img.set({ selectable: false });
-        img.set({ crossOrigin: 'Anonymous' });
+        img.set({ crossOrigin: 'anonymous' });
         console.log(img);
         this.image = img;
         this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
-        this.canvas.bringToFront(img);
+        console.log('backgroundImage1: ', this.canvas.backgroundImage);
+        console.log(getComputedStyle(this.screen.nativeElement).backgroundImage);
+        // this.canvas.bringToFront(img); 
         this.inProgress = false;
       });
     }, (error) => console.log('error: ', error));
     console.log('currentShape: ', this.currentShape);
+    console.log('backgroundImage2: ', this.canvas.backgroundImage);
 
     this.canvas.on('mouse:down', (event) => this.handleMouseDown(event));
     this.canvas.on('mouse:move', (event) => this.handleMouseMove(event));
@@ -135,11 +157,93 @@ export class DrawComponent implements OnInit {
         selection.set({ selectable: false });
       }
     });
+  }
 
+  private setupUndoRedo(): void {
+    // ... your existing event handlers
 
+    this.canvas.on('path:created', (event: any) => {
+      const path = event.path;
+      path.set({ selectable: true });
+
+      this.canvas.add(path);
+      this.canvas.renderAll();
+      this.saveCanvasState();
+    });
+
+    this.canvas.on('selection:created', (event) => {
+      // ... your existing code
+      this.saveCanvasState();
+    });
+  }
+
+  private saveCanvasState(): void {
+    const state = JSON.stringify(this.canvas.toJSON());
+    this.undoStack.push(state);
+    this.redoStack = [];
+
+    console.log('stack: ', this.undoStack);
 
   }
 
+  undo(): void {
+    console.log('undo1: ', this.undoStack);
+    if (this.undoStack.length > 1) {
+      const prevState = this.undoStack.pop();
+      this.redoStack.push(prevState!); // Save state for redo
+      this.canvas.loadFromJSON(this.undoStack[this.undoStack.length - 1], () => {
+        this.canvas.renderAll();
+      });
+    }
+    console.log('undo2: ', this.undoStack);
+    console.log(this.canvas.backgroundImage);
+    if (!this.canvas.backgroundImage) {
+      fabric.Image.fromURL(this.currentShape.shapeUrl, (img) => {
+        img.set({ crossOrigin: 'anonymous' });
+        this.image = img;
+        img.set({ selectable: false });
+        this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
+        this.canvas.bringToFront(img);
+        this.inProgress = false;
+      });
+    }
+  }
+
+  redo(): void {
+    if (this.redoStack.length > 0) {
+      const nextState = this.redoStack.pop();
+      this.undoStack.push(nextState!); // Save state for undo
+      this.canvas.loadFromJSON(nextState, () => {
+        this.canvas.renderAll();
+      });
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === 'z') {
+        this.undo();
+      } else if (event.key === 'y') {
+        this.redo();
+      }
+    }
+  }
+
+  toHome() {
+    this.router.navigate(['/']);
+  }
+
+  openShare(): void {
+    const dialogRef = this.dialog.open(ShareDrawingComponent, {
+      data: { shapeId: this.shapeId, name: this.drawingName },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.drawingName = result;
+    });
+  }
 
   playNextAudio() {
     const audioElement: HTMLAudioElement = this.audioPlayer.nativeElement;
@@ -187,6 +291,9 @@ export class DrawComponent implements OnInit {
       this.canvas.bringToFront(img);
       this.inProgress = false;
     });
+    this.undoStack = [];
+    this.redoStack= [];
+    this.setupUndoRedo();
   }
 
   changeColor(event: any) {
@@ -265,47 +372,55 @@ export class DrawComponent implements OnInit {
     return `${value}`;
   }
 
-  @ViewChild('screen') screen!: ElementRef;
-  @ViewChild('scncanvas') scncanvas!: ElementRef;
-  @ViewChild('downloadLink') downloadLink!: ElementRef;
-
   download() {
-    console.log('in download ', this.screen.nativeElement);
-    const elementToCapture = document.getElementById('drawing');
-    // if (elementToCapture) {
-    html2canvas(this.screen.nativeElement,
-      {
-        useCORS: true,
-        allowTaint: false,
-      }).then((canvas) => {
-        // canvas.setAttribute('crossOrigin', 'anonymous');
-        console.log(canvas.toDataURL());
+    // Create a data URL for the canvas and trigger download
+    const dataURL = this.canvas.toDataURL({ format: 'png', multiplier: 2 });
 
-        // Check if canvas has a background image
-        console.log("Canvas background image:", getComputedStyle(this.screen.nativeElement).backgroundImage);
-
-        this.scncanvas.nativeElement.src = canvas.toDataURL();
-        this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
-        this.downloadLink.nativeElement.download = 'marble-diagram.png';
-        this.downloadLink.nativeElement.click();
-        // const imgData = canvas.toDataURL('image/png');
-        // const a = document.createElement('a');
-        // a.href = imgData;
-        // a.download = 'myDrawing.png';
-        // a.click;
-      })
-    // }
+    // Create a download link
+    const downloadLink = document.createElement('a');
+    downloadLink.href = dataURL;
+    downloadLink.download = 'marble-diagram.png';
+    downloadLink.click();
   }
+
+
+  // download() {
+  //   console.log('in download ', this.screen.nativeElement);
+  //   const elementToCapture = document.getElementById('drawing');
+  //   // if (elementToCapture) {
+  //   html2canvas(this.screen.nativeElement,
+  //     {
+  //       useCORS: true,
+  //       allowTaint: false,
+  //     }).then((canvas) => {
+  //       // canvas.setAttribute('crossOrigin', 'anonymous');
+  //       console.log(canvas.toDataURL());
+
+  //       // Check if canvas has a background image
+  //       console.log("Canvas background image:", getComputedStyle(this.screen.nativeElement).backgroundImage);
+
+  //       this.scncanvas.nativeElement.src = canvas.toDataURL();
+  //       this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
+  //       this.downloadLink.nativeElement.download = 'marble-diagram.png';
+  //       this.downloadLink.nativeElement.click();
+  //       // const imgData = canvas.toDataURL('image/png');
+  //       // const a = document.createElement('a');
+  //       // a.href = imgData;
+  //       // a.download = 'myDrawing.png';
+  //       // a.click;
+  //     })
+  //   // }
+  // }
 
   // download() {
   //   // Serialize the canvas objects excluding the background image
   //   const serializedData = JSON.stringify({
   //     objects: this.canvas.getObjects().filter((object) => object !== this.image.toJSON())
   //   });
-  
+
   //   // Create a new canvas
   //   const drawingsCanvas = new fabric.Canvas(null);
-  
+
   //   // Load the serialized data onto the new canvas
   //   drawingsCanvas.loadFromJSON(serializedData, () => {
   //     // Create a data URL for the drawings-only canvas and trigger download
@@ -315,58 +430,58 @@ export class DrawComponent implements OnInit {
   //     downloadLink.click();
   //   });
   // }
-  
 
 
 
-    openExamples(): void {
-      this.router.navigate(['/examples', { shapeId: this.currentShape.shapeId }]);
-    }
 
-    openMyDrawings(): void {
-      this.router.navigate(['/my-drawings', { shapeId: this.currentShape.shapeId }]);
-    }
+  openExamples(): void {
+    this.router.navigate(['/examples', { shapeId: this.currentShape.shapeId }]);
+  }
 
-
-    pauseAudio() {
-      this.audioPlayer.nativeElement.pause();
-      this.isPlaying = false;
-    }
-
-    playAudio() {
-      this.audioPlayer.nativeElement.play();
-      this.isPlaying = true;
-    }
+  openMyDrawings(): void {
+    this.router.navigate(['/my-drawings', { shapeId: this.currentShape.shapeId }]);
+  }
 
 
-    changeFillMode() {
-      this.isFillMode = !this.isFillMode;
-      console.log('fill mode: ', this.isFillMode);
-    }
+  pauseAudio() {
+    this.audioPlayer.nativeElement.pause();
+    this.isPlaying = false;
+  }
 
-    isDrawing: boolean = false;
+  playAudio() {
+    this.audioPlayer.nativeElement.play();
+    this.isPlaying = true;
+  }
 
-    toggleDrawMode(): void {
-      this.isDrawing = !this.isDrawing;
-      this.canvas.isDrawingMode = this.isDrawing;
-      console.log('isDrawMode', this.isDrawing);
-    }
 
-    toggleFillMode(): void {
-      this.isFillMode = !this.isFillMode;
-      console.log('fill mode: ', this.isFillMode);
-    }
+  changeFillMode() {
+    this.isFillMode = !this.isFillMode;
+    console.log('fill mode: ', this.isFillMode);
+  }
 
-    handleMouseMove(event: fabric.IEvent): void {
-      // Additional drawing functionality can be added here
-    }
+  isDrawing: boolean = false;
 
-    handleMouseUp(): void {
-      // Additional handling on mouse up can be added here
-    }
+  toggleDrawMode(): void {
+    this.isDrawing = !this.isDrawing;
+    this.canvas.isDrawingMode = this.isDrawing;
+    console.log('isDrawMode', this.isDrawing);
+  }
 
-    handleMouseDown(event: fabric.IEvent): void {
-      if(this.isFillMode) {
+  toggleFillMode(): void {
+    this.isFillMode = !this.isFillMode;
+    console.log('fill mode: ', this.isFillMode);
+  }
+
+  handleMouseMove(event: fabric.IEvent): void {
+    // Additional drawing functionality can be added here
+  }
+
+  handleMouseUp(): void {
+    // Additional handling on mouse up can be added here
+  }
+
+  handleMouseDown(event: fabric.IEvent): void {
+    if (this.isFillMode) {
       this.canvas.selection = false;
       const pointer = this.canvas.getPointer(event.e);
 
@@ -384,9 +499,9 @@ export class DrawComponent implements OnInit {
       }
     }
     const backgroundImage = this.canvas.backgroundImage;
-      if (backgroundImage) {
-        this.canvas.bringToFront(backgroundImage as fabric.Object);
-      }
+    if (backgroundImage) {
+      this.canvas.bringToFront(backgroundImage as fabric.Object);
+    }
   }
 
 }

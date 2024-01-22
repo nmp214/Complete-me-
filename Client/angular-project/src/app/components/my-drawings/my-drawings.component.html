@@ -4,18 +4,21 @@
     </div>
     <div class="content">
         <h1 class="title">הציורים שלי</h1>
+        <div class="no-drawings" *ngIf="drawings.length === 0">
+            <h2>עדיין אין לך ציורים. מוזמן להתחיל!</h2>
+        </div>
         <div class="my-drawings">
             <div class="drawing" *ngFor="let drawing of drawings">
-                <img src={{drawing.displayDrawingUrl}} alt="התמונה לא עלתה">
+                <img src={{drawing.displayDrawingUrl}} alt="התמונה לא עלתה" (click)="openImage(drawing.drawingUrl)">
             </div>
         </div>
         <div class="add">
-        <button class="add-drawing" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+        <button (click)="add()" class="add-drawing" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
             <mat-icon>add</mat-icon>
         </button>
     </div>
     </div>
     <div class="left-side">
-        <img class="logo" src="../../../assets/complete me.png" />
+        <img class="logo" src="../../../assets/complete me.png" (click)="toHome()" />
     </div>
 </div>

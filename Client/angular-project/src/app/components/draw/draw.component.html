@@ -64,11 +64,15 @@
                 </button>
             </div>
         </div>
-        <button class="share" mat-raised-button color="accent">רוצה לשתף <br> אחרים בציור?</button>
+        <button class="share" mat-raised-button color="accent" (click)="openShare()">רוצה לשתף <br> אחרים
+            בציור?</button>
     </div>
     <div class="content">
-        <audio #audioPlayer>
+        <audio #audioPlayer loop>
             <!-- <source src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/shapes%2F_%D7%95%D7%9E%D7%AA%D7%A7%D7%93%D7%A9_%20I%20%D7%9E%D7%95%D7%98%D7%99%20%D7%A9%D7%98%D7%99%D7%99%D7%A0%D7%9E%D7%A5%20I%20%D7%9E%D7%A7%D7%94%D7%9C%D7%AA%20%D7%9E%D7%9C%D7%9B%D7%95%D7%AA%20I%20%D7%93%D7%A8%D7%A9%D7%95%20U'miskadesh%20I%20Motty%20Steinmetz%20I%20Malchut%20I%20Dirshu%20I.wav?alt=media&token=00d69c01-bc48-46a0-beba-7803a0e069b2" type="audio/mpeg"> -->
+            <source
+                src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/music%2Fmusic.mp3?alt=media&token=161353b9-2af2-4e99-ab3a-3063496e5dc3"
+                type="audio/mpeg">
             <source
                 src="https://firebasestorage.googleapis.com/v0/b/complete-me-216ba.appspot.com/o/music%2FI%20pray%20%D7%90%D7%A4%D7%A8%D7%AA%20%D7%A4%D7%A1%D7%A0%D7%AA%D7%A8.mp3?alt=media&token=1a430250-5188-4afa-8638-d7131cd42fee"
                 type="audio/mpeg">
@@ -81,8 +85,8 @@
             Your browser does not support the audio element.
         </audio>
         <div class="drawing">
+            <mat-spinner style="position: absolute;" *ngIf="inProgress"></mat-spinner>
             <canvas #screen id="canvas" width="1020" height="580"></canvas>
-            <mat-spinner *ngIf="inProgress"></mat-spinner>
         </div>
         <div class="actions">
             <!-- <button (click)="toggleDrawMode()">Toggle Draw Mode</button> -->
@@ -102,15 +106,27 @@
         </div>
     </div>
     <div class="left-side">
-        <img class="logo" src="../../../assets/complete me.png" />
+        <img class="logo" src="../../../assets/complete me.png" (click)="toHome()" />
         <div>
-            <button class="save" mat-raised-button color="accent">שמירה</button>
+            <button class="do" (click)="undo()" title="בטל" mat-mini-fab color="primary"
+                aria-label="Example icon button with a plus one icon">
+                <mat-icon>undo</mat-icon>
+            </button>
+            <button class="do" (click)="redo()" title="בצע שוב" mat-mini-fab color="primary"
+                aria-label="Example icon button with a plus one icon">
+                <mat-icon>redo</mat-icon>
+            </button>
+        </div>
+
+        <div>
+            <button (click)="openShare()" class="save" mat-raised-button color="accent">שמירה</button>
             <button (click)="download()" class="save" mat-raised-button color="accent">הורדה</button>
         </div>
     </div>
 </div>
 
-<div id="download">
+
+<!-- <div id="download">
     <canvas #scncanvas></canvas>
     <a #downloadLink></a>
-</div>
+</div> -->
